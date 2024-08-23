@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máy Tính IP</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .guide {
+            flex: 1;
+            max-width: 300px;
+            margin-right: 20px;
+        }
+        .guide h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        .guide p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+        .form-container {
+            flex: 2;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        .form-group input[type="text"],
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #f8f9fa;
+        }
+        .form-group input[type="text"]:focus,
+        .form-group select:focus {
+            border-color: #80bdff;
+            outline: none;
+            background-color: #ffffff;
+        }
+        .btn {
+            padding: 12px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .result-label {
+            font-size: 14px;
+            color: #333;
+        }
+        .result-label span {
+            font-weight: 500;
+        }
+        .oktett-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .oktett-container input {
+            width: 60px;
+            text-align: center;
+        }
+        /* Thanh chắn ngang giữa các phần */
+        .separator {
+            width: 2px;
+            background-color: #dee2e6;
+            margin: 0 20px;
+        }
+        /* Thanh chắn ngang phía dưới cùng */
+        .footer-divider {
+            width: 100%;
+            height: 2px;
+            background-color: #dee2e6;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            font-size: 16px; /* Tăng cỡ chữ */
+            color: #333; /* Màu chữ tối hơn */
+            background-color: #f8f9fa; /* Nền nhẹ hơn */
+            padding: 20px; /* Thêm padding */
+            border-radius: 10px; /* Bo góc */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng bóng */
+        }
+        .footer p {
+            margin: 10px 0;
+        }
+        .footer p:first-child {
+            font-size: 18px; /* Tăng cỡ chữ cho thông tin quan trọng */
+            font-weight: bold;
+            color: #007bff; /* Màu nổi bật cho tên tác giả */
+        }
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Phần hướng dẫn sử dụng -->
+        <div class="guide">
+            <h2>Hướng Dẫn Sử Dụng Ứng Dụng Tính Toán IP</h2>
+            <p><strong>Mục Đích:</strong></p>
+            <p>Ứng dụng này giúp bạn tính toán các thông tin liên quan đến địa chỉ IP và subnet mask, bao gồm địa chỉ IP nhị phân, subnet mask, địa chỉ mạng, địa chỉ broadcast, phạm vi địa chỉ IP, và số lượng địa chỉ IP hợp lệ.</p>
+            <p><strong>Các Trường Nhập Liệu:</strong></p>
+            <p><strong>Octet 1, Octet 2, Octet 3, Octet 4:</strong><br>
+            Nhập từng phần của địa chỉ IP (mỗi phần gọi là oktett). Địa chỉ IP có định dạng IPv4 bao gồm bốn oktett, mỗi oktett có giá trị từ 0 đến 255.<br>
+            Ví dụ: Để nhập địa chỉ IP 192.168.1.1, bạn sẽ nhập 192 vào Octet 1, 168 vào Octet 2, 1 vào Octet 3, và 1 vào Octet 4.</p>
+            <p><strong>Giá trị CIDR:</strong><br>
+            CIDR (Classless Inter-Domain Routing) là giá trị số đại diện cho kích thước của subnet mask. Ví dụ, CIDR 24 tương ứng với subnet mask 255.255.255.0.<br>
+            Chọn giá trị CIDR từ menu thả xuống. Giá trị CIDR có thể từ 1 đến 32.</p>
+            <p><strong>Các Kết Quả Tính Toán:</strong></p>
+            <p><strong>Địa chỉ IP nhị phân:</strong><br>
+            Hiển thị địa chỉ IP của bạn dưới dạng nhị phân. Mỗi oktett sẽ được chuyển đổi thành chuỗi nhị phân 8 bit.</p>
+            <p><strong>Subnet Mask:</strong><br>
+            Hiển thị subnet mask tương ứng với giá trị CIDR đã chọn.</p>
+            <p><strong>Subnet Mask nhị phân:</strong><br>
+            Hiển thị subnet mask dưới dạng nhị phân.</p>
+            <p><strong>Lớp địa chỉ IP:</strong><br>
+            Xác định lớp của địa chỉ IP (Class A, B, C, D, hoặc E) dựa trên giá trị của oktett đầu tiên.</p>
+            <p><strong>Địa chỉ mạng:</strong><br>
+            Tính toán địa chỉ mạng dựa trên địa chỉ IP và subnet mask.</p>
+            <p><strong>Địa chỉ broadcast:</strong><br>
+            Tính toán địa chỉ broadcast của subnet. Địa chỉ này được sử dụng để gửi dữ liệu đến tất cả các thiết bị trong subnet.</p>
+            <p><strong>Phạm vi địa chỉ IP:</strong><br>
+            Hiển thị phạm vi địa chỉ IP hợp lệ trong subnet. Phạm vi bao gồm địa chỉ IP đầu tiên (địa chỉ mạng + 1) đến địa chỉ IP cuối cùng (địa chỉ broadcast - 1).</p>
+            <p><strong>Số lượng địa chỉ IP hợp lệ:</strong><br>
+            Hiển thị số lượng địa chỉ IP hợp lệ trong subnet (số lượng IP có thể sử dụng cho các thiết bị).</p>
+            <p><strong>Cách Sử Dụng:</strong></p>
+            <p>Nhập địa chỉ IP vào các trường nhập liệu Octet 1 đến Octet 4.<br>
+            Chọn giá trị CIDR từ menu thả xuống.<br>
+            Nhấn nút "Tính" để thực hiện các tính toán.<br>
+            Xem các kết quả tính toán hiển thị bên dưới nút "Tính".</p>
+            <p><strong>Lưu Ý:</strong></p>
+            <p>Đảm bảo rằng các giá trị nhập vào đều nằm trong phạm vi hợp lệ (0-255) cho các oktett và CIDR từ 1 đến 32.<br>
+            Nếu CIDR là 31 hoặc 32, phạm vi địa chỉ IP sẽ không có vì đây là subnet cho các liên kết điểm-điểm.</p>
+        </div>
+
+        <!-- Thanh chắn ngang giữa các phần -->
+        <div class="separator"></div>
+
+        <!-- Phần form tính toán -->
+        <div class="form-container">
+            <h1>Nhập địa chỉ IP</h1>
+            <div class="oktett-container">
+                <div class="form-group">
+                    <label for="octet1">Octet 1:</label>
+                    <input type="text" id="octet1" maxlength="3">
+                </div>
+                <div class="form-group">
+                    <label for="octet2">Octet 2:</label>
+                    <input type="text" id="octet2" maxlength="3">
+                </div>
+                <div class="form-group">
+                    <label for="octet3">Octet 3:</label>
+                    <input type="text" id="octet3" maxlength="3">
+                </div>
+                <div class="form-group">
+                    <label for="octet4">Octet 4:</label>
+                    <input type="text" id="octet4" maxlength="3">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="cidr">Giá trị CIDR:</label>
+                <select id="cidr">
+                    <!-- Các tùy chọn CIDR từ 1 đến 32 -->
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                    <option value="32">32</option>
+                </select>
+            </div>
+
+            <!-- Calculate button -->
+            <button class="btn" id="calculateBtn">Tính</button>
+
+            <!-- Result labels -->
+            <div class="form-group result-label">
+                <label>Địa chỉ IP nhị phân:</label>
+                <span id="binarisIPLabel"></span>
+            </div>
+            <div class="form-group result-label">
+                <label>Subnet mask:</label>
+                <span id="maszkLabel"></span>
+            </div>
+            <div class="form-group result-label">
+                <label>Subnet mask nhị phân:</label>
+                <span id="binarisMaszkLabel"></span>
+            </div>
+            <div class="form-group result-label">
+                <label>Lớp địa chỉ IP:</label>
+                <span id="cimosztalyLabel"></span>
+            </div>
+            <div class="form-group result-label">
+                <label>Địa chỉ mạng:</label>
+                <span id="halozatiCimLabel"></span>
+            </div>
+            <div class="form-group result-label">
+                <label>Địa chỉ broadcast:</label>
+                <span id="broadcastLabel"></span>
+            </div>
+            <div class="form-group result-label">
+                <label>Phạm vi địa chỉ IP:</label>
+                <span id="ipCimtartomanyLabel"></span>
+            </div>
+            <div class="form-group result-label">
+                <label>Số lượng địa chỉ IP hợp lệ:</label>
+                <span id="ipCimekDbLabel"></span>
+            </div>
+
+            <!-- Thanh chắn ngang phía dưới cùng -->
+            <div class="footer-divider"></div>
+
+            <!-- Chú thích tác giả -->
+            <div class="footer">
+                <p>Hồ Trung Phước - 16/06/2003</p>
+                <p>20/08/2024 - Máy tính IP</p>
+                <p>Đồ Án Tốt nghiệp</p>
+                <p><a href="https://drive.google.com/file/d/1soLa6dacibwWMfK1_4MlBzppPbwJnu-t/view?usp=drive_link" download>Tải ứng dụng tại đây</a></p>
+                <p>Vui lòng không reup dưới mọi hình thức!</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
