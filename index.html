@@ -104,13 +104,11 @@
             width: 60px;
             text-align: center;
         }
-        /* Thanh chắn ngang giữa các phần */
         .separator {
             width: 2px;
             background-color: #dee2e6;
             margin: 0 20px;
         }
-        /* Thanh chắn ngang phía dưới cùng */
         .footer-divider {
             width: 100%;
             height: 2px;
@@ -119,20 +117,20 @@
         }
         .footer {
             text-align: center;
-            font-size: 16px; /* Tăng cỡ chữ */
-            color: #333; /* Màu chữ tối hơn */
-            background-color: #f8f9fa; /* Nền nhẹ hơn */
-            padding: 20px; /* Thêm padding */
-            border-radius: 10px; /* Bo góc */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng bóng */
+            font-size: 16px;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .footer p {
             margin: 10px 0;
         }
         .footer p:first-child {
-            font-size: 18px; /* Tăng cỡ chữ cho thông tin quan trọng */
+            font-size: 18px;
             font-weight: bold;
-            color: #007bff; /* Màu nổi bật cho tên tác giả */
+            color: #007bff;
         }
         .footer a {
             color: #007bff;
@@ -211,7 +209,6 @@
             <div class="form-group">
                 <label for="cidr">Giá trị CIDR:</label>
                 <select id="cidr">
-                    <!-- Các tùy chọn CIDR từ 1 đến 32 -->
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -283,7 +280,13 @@
                 <label>Số lượng địa chỉ IP hợp lệ:</label>
                 <span id="ipCimekDbLabel"></span>
             </div>
-
+            <div class="form-group result-label">
+                <label>Các mạng con:</label>
+                <ul id="subnetworksLabel">
+                    <!-- Các mạng con sẽ được hiển thị tại đây -->
+                </ul>
+            </div>
+            
             <!-- Thanh chắn ngang phía dưới cùng -->
             <div class="footer-divider"></div>
 
