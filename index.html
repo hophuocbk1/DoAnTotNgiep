@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Máy Tính IP</title>
+    <title>Máy Tính IP với Classful Subnetting</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -39,6 +39,14 @@
             color: #555;
             line-height: 1.6;
         }
+        .guide strong {
+            color: #d9534f;
+        }
+        .separator {
+            width: 2px;
+            background-color: #dee2e6;
+            margin: 0 20px;
+        }
         .form-container {
             flex: 2;
             width: 100%;
@@ -50,7 +58,15 @@
             font-size: 24px;
             margin-bottom: 20px;
         }
+        .oktett-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
         .form-group {
+            flex: 1 1 23%;
+            box-sizing: border-box;
             margin-bottom: 10px;
         }
         .form-group label {
@@ -88,27 +104,6 @@
         .btn:hover {
             background-color: #0056b3;
         }
-        .result-label {
-            font-size: 14px;
-            color: #333;
-        }
-        .result-label span {
-            font-weight: 500;
-        }
-        .oktett-container {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .oktett-container input {
-            width: 60px;
-            text-align: center;
-        }
-        .separator {
-            width: 2px;
-            background-color: #dee2e6;
-            margin: 0 20px;
-        }
         .footer-divider {
             width: 100%;
             height: 2px;
@@ -139,47 +134,34 @@
         .footer a:hover {
             text-decoration: underline;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #dee2e6;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Phần hướng dẫn sử dụng -->
         <div class="guide">
-            <h2>Hướng Dẫn Sử Dụng Ứng Dụng Tính Toán IP</h2>
-            <p><strong>Mục Đích:</strong></p>
-            <p>Ứng dụng này giúp bạn tính toán các thông tin liên quan đến địa chỉ IP và subnet mask, bao gồm địa chỉ IP nhị phân, subnet mask, địa chỉ mạng, địa chỉ broadcast, phạm vi địa chỉ IP, và số lượng địa chỉ IP hợp lệ.</p>
-            <p><strong>Các Trường Nhập Liệu:</strong></p>
-            <p><strong>Octet 1, Octet 2, Octet 3, Octet 4:</strong><br>
-            Nhập từng phần của địa chỉ IP (mỗi phần gọi là oktett). Địa chỉ IP có định dạng IPv4 bao gồm bốn oktett, mỗi oktett có giá trị từ 0 đến 255.<br>
-            Ví dụ: Để nhập địa chỉ IP 192.168.1.1, bạn sẽ nhập 192 vào Octet 1, 168 vào Octet 2, 1 vào Octet 3, và 1 vào Octet 4.</p>
-            <p><strong>Giá trị CIDR:</strong><br>
-            CIDR (Classless Inter-Domain Routing) là giá trị số đại diện cho kích thước của subnet mask. Ví dụ, CIDR 24 tương ứng với subnet mask 255.255.255.0.<br>
-            Chọn giá trị CIDR từ menu thả xuống. Giá trị CIDR có thể từ 1 đến 32.</p>
-            <p><strong>Các Kết Quả Tính Toán:</strong></p>
-            <p><strong>Địa chỉ IP nhị phân:</strong><br>
-            Hiển thị địa chỉ IP của bạn dưới dạng nhị phân. Mỗi oktett sẽ được chuyển đổi thành chuỗi nhị phân 8 bit.</p>
-            <p><strong>Subnet Mask:</strong><br>
-            Hiển thị subnet mask tương ứng với giá trị CIDR đã chọn.</p>
-            <p><strong>Subnet Mask nhị phân:</strong><br>
-            Hiển thị subnet mask dưới dạng nhị phân.</p>
-            <p><strong>Lớp địa chỉ IP:</strong><br>
-            Xác định lớp của địa chỉ IP (Class A, B, C, D, hoặc E) dựa trên giá trị của oktett đầu tiên.</p>
-            <p><strong>Địa chỉ mạng:</strong><br>
-            Tính toán địa chỉ mạng dựa trên địa chỉ IP và subnet mask.</p>
-            <p><strong>Địa chỉ broadcast:</strong><br>
-            Tính toán địa chỉ broadcast của subnet. Địa chỉ này được sử dụng để gửi dữ liệu đến tất cả các thiết bị trong subnet.</p>
-            <p><strong>Phạm vi địa chỉ IP:</strong><br>
-            Hiển thị phạm vi địa chỉ IP hợp lệ trong subnet. Phạm vi bao gồm địa chỉ IP đầu tiên (địa chỉ mạng + 1) đến địa chỉ IP cuối cùng (địa chỉ broadcast - 1).</p>
-            <p><strong>Số lượng địa chỉ IP hợp lệ:</strong><br>
-            Hiển thị số lượng địa chỉ IP hợp lệ trong subnet (số lượng IP có thể sử dụng cho các thiết bị).</p>
-            <p><strong>Cách Sử Dụng:</strong></p>
-            <p>Nhập địa chỉ IP vào các trường nhập liệu Octet 1 đến Octet 4.<br>
-            Chọn giá trị CIDR từ menu thả xuống.<br>
-            Nhấn nút "Tính" để thực hiện các tính toán.<br>
-            Xem các kết quả tính toán hiển thị bên dưới nút "Tính".</p>
-            <p><strong>Lưu Ý:</strong></p>
-            <p>Đảm bảo rằng các giá trị nhập vào đều nằm trong phạm vi hợp lệ (0-255) cho các oktett và CIDR từ 1 đến 32.<br>
-            Nếu CIDR là 31 hoặc 32, phạm vi địa chỉ IP sẽ không có vì đây là subnet cho các liên kết điểm-điểm.</p>
+            <h2>Hướng dẫn sử dụng</h2>
+            <p><strong>Bước 1:</strong> Nhập địa chỉ IP vào các trường Octet 1, Octet 2, Octet 3, và Octet 4. Đảm bảo rằng các giá trị nằm trong khoảng từ 0 đến 255.</p>
+            <p><strong>Bước 2:</strong> Chọn lớp mạng phù hợp (Lớp A, B, hoặc C). Lớp mạng xác định cách subnet mask được thiết lập và số lượng mạng con có thể được tạo ra.</p>
+            <p><strong>Bước 3:</strong> Nhập số mạng con bạn muốn chia. Số này phải là một số nguyên dương và không vượt quá giới hạn của lớp mạng đã chọn.</p>
+            <p><strong>Bước 4:</strong> Nhấn nút "Tính" để tính toán. Chương trình sẽ hiển thị các thông tin liên quan đến mạng con bao gồm địa chỉ mạng, địa chỉ broadcast, phạm vi địa chỉ IP và số lượng IP hợp lệ cho từng mạng con.</p>
+            <p><strong>Lưu ý:</strong> Nếu nhập sai dữ liệu hoặc dữ liệu không hợp lệ, bạn sẽ nhận được cảnh báo để chỉnh sửa trước khi thực hiện tính toán.</p>
         </div>
 
         <!-- Thanh chắn ngang giữa các phần -->
@@ -187,7 +169,7 @@
 
         <!-- Phần form tính toán -->
         <div class="form-container">
-            <h1>Nhập địa chỉ IP</h1>
+            <h1>Classful Subnetting Calculator</h1>
             <div class="oktett-container">
                 <div class="form-group">
                     <label for="octet1">Octet 1:</label>
@@ -207,100 +189,178 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="cidr">Giá trị CIDR:</label>
-                <select id="cidr">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">21</option>
-                    <option value="22">22</option>
-                    <option value="23">23</option>
-                    <option value="24">24</option>
-                    <option value="25">25</option>
-                    <option value="26">26</option>
-                    <option value="27">27</option>
-                    <option value="28">28</option>
-                    <option value="29">29</option>
-                    <option value="30">30</option>
-                    <option value="31">31</option>
-                    <option value="32">32</option>
+                <label for="class">Lớp Mạng:</label>
+                <select id="class">
+                    <option value="A">Lớp A</option>
+                    <option value="B">Lớp B</option>
+                    <option value="C">Lớp C</option>
                 </select>
             </div>
+            <div class="form-group">
+                <label for="subnetCount">Số Mạng Con:</label>
+                <input type="text" id="subnetCount" maxlength="3">
+            </div>
+            <button class="btn" onclick="calculate()">Tính</button>
 
-            <!-- Calculate button -->
-            <button class="btn" id="calculateBtn">Tính</button>
-
-            <!-- Result labels -->
-            <div class="form-group result-label">
-                <label>Địa chỉ IP nhị phân:</label>
-                <span id="binarisIPLabel"></span>
-            </div>
-            <div class="form-group result-label">
-                <label>Subnet mask:</label>
-                <span id="maszkLabel"></span>
-            </div>
-            <div class="form-group result-label">
-                <label>Subnet mask nhị phân:</label>
-                <span id="binarisMaszkLabel"></span>
-            </div>
-            <div class="form-group result-label">
-                <label>Lớp địa chỉ IP:</label>
-                <span id="cimosztalyLabel"></span>
-            </div>
-            <div class="form-group result-label">
-                <label>Địa chỉ mạng:</label>
-                <span id="halozatiCimLabel"></span>
-            </div>
-            <div class="form-group result-label">
-                <label>Địa chỉ broadcast:</label>
-                <span id="broadcastLabel"></span>
-            </div>
-            <div class="form-group result-label">
-                <label>Phạm vi địa chỉ IP:</label>
-                <span id="ipCimtartomanyLabel"></span>
-            </div>
-            <div class="form-group result-label">
-                <label>Số lượng địa chỉ IP hợp lệ:</label>
-                <span id="ipCimekDbLabel"></span>
-            </div>
-            <div class="form-group result-label">
-                <label>Các mạng con:</label>
-                <ul id="subnetworksLabel">
-                    <!-- Các mạng con sẽ được hiển thị tại đây -->
-                </ul>
-            </div>
-            
-            <!-- Thanh chắn ngang phía dưới cùng -->
             <div class="footer-divider"></div>
 
-            <!-- Chú thích tác giả -->
-            <div class="footer">
-                <p>Hồ Trung Phước - 16/06/2003</p>
-                <p>20/08/2024 - Máy tính IP</p>
-                <p>Đồ Án Tốt nghiệp</p>
-                <p><a href="https://drive.google.com/file/d/1soLa6dacibwWMfK1_4MlBzppPbwJnu-t/view?usp=drive_link" download>Tải ứng dụng tại đây</a></p>
-                <p>Vui lòng không reup dưới mọi hình thức!</p>
+            <!-- Kết quả tính toán -->
+            <div id="results">
+                <p class="result-label">Địa chỉ IP nhị phân: <span id="binaryIP"></span></p>
+                <p class="result-label">Subnet Mask: <span id="subnetMask"></span></p>
+                <p class="result-label">Subnet Mask nhị phân: <span id="binarySubnetMask"></span></p>
+                <p class="result-label">Số Mạng Con: <span id="subnetCountResult"></span></p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mạng Con</th>
+                            <th>Địa chỉ Mạng</th>
+                            <th>Địa chỉ Broadcast</th>
+                            <th>Phạm vi Địa chỉ IP</th>
+                            <th>Số lượng IP hợp lệ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subnetResults">
+                        <!-- Kết quả mạng con sẽ được chèn vào đây -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    
-    <script src="script.js"></script>
+
+    <div class="footer">
+        <p>Đồ án tốt nghiệp - Hồ Trung Phước</p>
+        <p>Ngày 20/08/2024</p>
+        <p>Được phát triển bởi <a href="https://github.com/hophuocbk1" target="_blank">Hồ Trung Phước</a></p>
+        <p>Vui lòng không Reup với mọi hình thức</p>
+    </div>
+
+    <script>
+        function calculate() {
+            const octet1 = parseInt(document.getElementById('octet1').value, 10);
+            const octet2 = parseInt(document.getElementById('octet2').value, 10);
+            const octet3 = parseInt(document.getElementById('octet3').value, 10);
+            const octet4 = parseInt(document.getElementById('octet4').value, 10);
+            const classType = document.getElementById('class').value;
+            const subnetCount = parseInt(document.getElementById('subnetCount').value, 10);
+
+            if (isNaN(octet1) || isNaN(octet2) || isNaN(octet3) || isNaN(octet4) || isNaN(subnetCount)) {
+                alert('Vui lòng nhập đầy đủ và chính xác các trường dữ liệu!');
+                return;
+            }
+            if (octet1 < 0 || octet1 > 255 || octet2 < 0 || octet2 > 255 || octet3 < 0 || octet3 > 255 || octet4 < 0 || octet4 > 255) {
+                alert('Các giá trị octet phải nằm trong khoảng từ 0 đến 255!');
+                return;
+            }
+            if (subnetCount < 1 || !Number.isInteger(subnetCount)) {
+                alert('Số mạng con phải là một số nguyên dương!');
+                return;
+            }
+
+            // Tính toán địa chỉ IP nhị phân
+            const binaryIP = [octet1, octet2, octet3, octet4].map(num => num.toString(2).padStart(8, '0')).join('.');
+
+            // Xác định subnet mask và số bit cho mạng con
+            let subnetMask, subnetBits;
+            switch (classType) {
+                case 'A':
+                    subnetMask = '255.0.0.0';
+                    subnetBits = 8;
+                    break;
+                case 'B':
+                    subnetMask = '255.255.0.0';
+                    subnetBits = 16;
+                    break;
+                case 'C':
+                    subnetMask = '255.255.255.0';
+                    subnetBits = 24;
+                    break;
+                default:
+                    alert('Lớp mạng không hợp lệ!');
+                    return;
+            }
+
+            // Tính toán subnet mask nhị phân
+            const binarySubnetMask = subnetMask.split('.').map(num => parseInt(num).toString(2).padStart(8, '0')).join('.');
+
+            // Tính toán số bit cần thiết cho mạng con
+            const requiredBits = Math.ceil(Math.log2(subnetCount));
+            const totalBits = subnetBits + requiredBits;
+
+            // Tính toán subnet mask mới và số mạng con
+            const newSubnetMask = (0xFFFFFFFF << (32 - totalBits)) >>> 0;
+            const newSubnetMaskStr = [
+                (newSubnetMask >>> 24) & 0xFF,
+                (newSubnetMask >>> 16) & 0xFF,
+                (newSubnetMask >>> 8) & 0xFF,
+                newSubnetMask & 0xFF
+            ].join('.');
+
+            // Tính toán các địa chỉ mạng và broadcast cho từng mạng con
+            const networkAddresses = [];
+            const broadcastAddresses = [];
+            const ipRanges = [];
+            const validIPCounts = [];
+
+            for (let i = 0; i < subnetCount; i++) {
+                const startAddress = (i * (1 << (32 - totalBits))) + (octet1 << 24) + (octet2 << 16) + (octet3 << 8) + octet4;
+                const endAddress = startAddress + (1 << (32 - totalBits)) - 1;
+
+                const networkAddress = [
+                    (startAddress >>> 24) & 0xFF,
+                    (startAddress >>> 16) & 0xFF,
+                    (startAddress >>> 8) & 0xFF,
+                    startAddress & 0xFF
+                ].join('.');
+
+                const broadcastAddress = [
+                    (endAddress >>> 24) & 0xFF,
+                    (endAddress >>> 16) & 0xFF,
+                    (endAddress >>> 8) & 0xFF,
+                    endAddress & 0xFF
+                ].join('.');
+
+                const firstIP = [
+                    (startAddress >>> 24) & 0xFF,
+                    (startAddress >>> 16) & 0xFF,
+                    (startAddress >>> 8) & 0xFF,
+                    (startAddress + 1) & 0xFF
+                ].join('.');
+
+                const lastIP = [
+                    (endAddress >>> 24) & 0xFF,
+                    (endAddress >>> 16) & 0xFF,
+                    (endAddress >>> 8) & 0xFF,
+                    (endAddress - 1) & 0xFF
+                ].join('.');
+
+                networkAddresses.push(networkAddress);
+                broadcastAddresses.push(broadcastAddress);
+                ipRanges.push(`${firstIP} - ${lastIP}`);
+                validIPCounts.push((1 << (32 - totalBits)) - 2);
+            }
+
+            // Hiển thị kết quả
+            document.getElementById('binaryIP').textContent = binaryIP;
+            document.getElementById('subnetMask').textContent = newSubnetMaskStr;
+            document.getElementById('binarySubnetMask').textContent = newSubnetMaskStr.split('.').map(num => parseInt(num).toString(2).padStart(8, '0')).join('.');
+            document.getElementById('subnetCountResult').textContent = subnetCount;
+
+            const subnetResults = document.getElementById('subnetResults');
+            subnetResults.innerHTML = ''; // Xóa kết quả cũ
+
+            for (let i = 0; i < subnetCount; i++) {
+                const row = `<tr>
+                    <td>Subnet ${i + 1}</td>
+                    <td>${networkAddresses[i]}</td>
+                    <td>${broadcastAddresses[i]}</td>
+                    <td>${ipRanges[i]}</td>
+                    <td>${validIPCounts[i]}</td>
+                </tr>`;
+                subnetResults.insertAdjacentHTML('beforeend', row);
+            }
+        }
+    </script>
 </body>
 </html>
