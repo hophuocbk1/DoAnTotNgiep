@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -75,8 +75,7 @@
             font-weight: 600;
             color: #555;
         }
-        .form-group input[type="text"],
-        .form-group select {
+        .form-group input[type="text"] {
             width: 100%;
             padding: 10px;
             font-size: 16px;
@@ -85,8 +84,7 @@
             box-sizing: border-box;
             background-color: #f8f9fa;
         }
-        .form-group input[type="text"]:focus,
-        .form-group select:focus {
+        .form-group input[type="text"]:focus {
             border-color: #80bdff;
             outline: none;
             background-color: #ffffff;
@@ -150,24 +148,40 @@
             background-color: #f1f1f1;
             font-weight: bold;
         }
+        .error-message {
+            color: #d9534f;
+            font-weight: bold;
+        }
+        .result-label {
+            margin: 10px 0;
+            font-weight: bold;
+            color: #333;
+        }
+        .result-label span {
+            font-weight: normal;
+            color: #555;
+        }
+        .subnet-inputs-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .subnet-inputs-container .form-group {
+            flex: 1 1 30%;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Phần hướng dẫn sử dụng -->
         <div class="guide">
             <h2>Hướng dẫn sử dụng</h2>
-            <p><strong>Bước 1:</strong> Nhập địa chỉ IP vào các trường Octet 1, Octet 2, Octet 3, và Octet 4. Đảm bảo rằng các giá trị nằm trong khoảng từ 0 đến 255.</p>
-            <p><strong>Bước 2:</strong> Chọn lớp mạng phù hợp (Lớp A, B, hoặc C). Lớp mạng xác định cách subnet mask được thiết lập và số lượng mạng con có thể được tạo ra.</p>
-            <p><strong>Bước 3:</strong> Nhập số mạng con bạn muốn chia. Số này phải là một số nguyên dương và không vượt quá giới hạn của lớp mạng đã chọn.</p>
-            <p><strong>Bước 4:</strong> Nhấn nút "Tính" để tính toán. Chương trình sẽ hiển thị các thông tin liên quan đến mạng con bao gồm địa chỉ mạng, địa chỉ broadcast, phạm vi địa chỉ IP và số lượng IP hợp lệ cho từng mạng con.</p>
-            <p><strong>Lưu ý:</strong> Nếu nhập sai dữ liệu hoặc dữ liệu không hợp lệ, bạn sẽ nhận được cảnh báo để chỉnh sửa trước khi thực hiện tính toán.</p>
+            <p>Nhập địa chỉ IP và số lượng mạng con bạn muốn tạo, sau đó nhập số lượng host cho từng mạng con.</p>
+            <p><strong>Ví dụ:</strong> Nếu bạn muốn chia địa chỉ IP thành nhiều mạng con, nhập số mạng con và số host cần cho mỗi mạng con.</p>
         </div>
 
-        <!-- Thanh chắn ngang giữa các phần -->
         <div class="separator"></div>
 
-        <!-- Phần form tính toán -->
         <div class="form-container">
             <h1>Classful Subnetting Calculator</h1>
             <div class="oktett-container">
@@ -189,28 +203,22 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="class">Lớp Mạng:</label>
-                <select id="class">
-                    <option value="A">Lớp A</option>
-                    <option value="B">Lớp B</option>
-                    <option value="C">Lớp C</option>
-                </select>
+                <label for="subnetCount">Số mạng con:</label>
+                <input type="text" id="subnetCount" maxlength="2" oninput="createSubnetInputs()">
             </div>
-            <div class="form-group">
-                <label for="subnetCount">Số Mạng Con:</label>
-                <input type="text" id="subnetCount" maxlength="3">
-            </div>
+            <div id="subnetInputs" class="subnet-inputs-container"></div>
+
             <button class="btn" onclick="calculate()">Tính</button>
 
             <div class="footer-divider"></div>
 
-            <!-- Kết quả tính toán -->
             <div id="results">
+                <div class="error-message" id="errorMessage"></div>
                 <p class="result-label">Địa chỉ IP nhị phân: <span id="binaryIP"></span></p>
                 <p class="result-label">Subnet Mask: <span id="subnetMask"></span></p>
                 <p class="result-label">Subnet Mask nhị phân: <span id="binarySubnetMask"></span></p>
+                <p class="result-label">Lớp mạng: <span id="networkClass"></span></p>
                 <p class="result-label">Số Mạng Con: <span id="subnetCountResult"></span></p>
-
                 <table>
                     <thead>
                         <tr>
@@ -233,133 +241,157 @@
         <p>Đồ án tốt nghiệp - Hồ Trung Phước</p>
         <p>Ngày 20/08/2024</p>
         <p>Được phát triển bởi <a href="https://github.com/hophuocbk1" target="_blank">Hồ Trung Phước</a></p>
-        <p>Vui lòng không Reup với mọi hình thức</p>
+        <p>Vui lòng không reup dưới mọi hình thức !</p>
     </div>
 
     <script>
+        function createSubnetInputs() {
+            const subnetCount = parseInt(document.getElementById('subnetCount').value);
+            const subnetInputsContainer = document.getElementById('subnetInputs');
+            subnetInputsContainer.innerHTML = '';
+
+            if (isNaN(subnetCount) || subnetCount <= 0) {
+                return;
+            }
+
+            for (let i = 1; i <= subnetCount; i++) {
+                const inputDiv = document.createElement('div');
+                inputDiv.className = 'form-group';
+
+                const label = document.createElement('label');
+                label.textContent = `Số lượng host cho mạng con ${i}:`;
+                inputDiv.appendChild(label);
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = `hosts${i}`;
+                input.maxLength = 4;
+                input.placeholder = 'Ví dụ: 30';
+                inputDiv.appendChild(input);
+
+                subnetInputsContainer.appendChild(inputDiv);
+            }
+        }
+
         function calculate() {
-            const octet1 = parseInt(document.getElementById('octet1').value, 10);
-            const octet2 = parseInt(document.getElementById('octet2').value, 10);
-            const octet3 = parseInt(document.getElementById('octet3').value, 10);
-            const octet4 = parseInt(document.getElementById('octet4').value, 10);
-            const classType = document.getElementById('class').value;
-            const subnetCount = parseInt(document.getElementById('subnetCount').value, 10);
+            const octet1 = parseInt(document.getElementById('octet1').value);
+            const octet2 = parseInt(document.getElementById('octet2').value);
+            const octet3 = parseInt(document.getElementById('octet3').value);
+            const octet4 = parseInt(document.getElementById('octet4').value);
 
-            if (isNaN(octet1) || isNaN(octet2) || isNaN(octet3) || isNaN(octet4) || isNaN(subnetCount)) {
-                alert('Vui lòng nhập đầy đủ và chính xác các trường dữ liệu!');
-                return;
-            }
-            if (octet1 < 0 || octet1 > 255 || octet2 < 0 || octet2 > 255 || octet3 < 0 || octet3 > 255 || octet4 < 0 || octet4 > 255) {
-                alert('Các giá trị octet phải nằm trong khoảng từ 0 đến 255!');
-                return;
-            }
-            if (subnetCount < 1 || !Number.isInteger(subnetCount)) {
-                alert('Số mạng con phải là một số nguyên dương!');
+            const ipAddress = `${octet1}.${octet2}.${octet3}.${octet4}`;
+            const subnetCount = parseInt(document.getElementById('subnetCount').value);
+            const hostCounts = [];
+
+            if (!validateIPAddress(octet1, octet2, octet3, octet4) || isNaN(subnetCount) || subnetCount <= 0) {
+                document.getElementById('errorMessage').textContent = 'Thông tin đầu vào không hợp lệ. Vui lòng kiểm tra lại.';
                 return;
             }
 
-            // Tính toán địa chỉ IP nhị phân
-            const binaryIP = [octet1, octet2, octet3, octet4].map(num => num.toString(2).padStart(8, '0')).join('.');
-
-            // Xác định subnet mask và số bit cho mạng con
-            let subnetMask, subnetBits;
-            switch (classType) {
-                case 'A':
-                    subnetMask = '255.0.0.0';
-                    subnetBits = 8;
-                    break;
-                case 'B':
-                    subnetMask = '255.255.0.0';
-                    subnetBits = 16;
-                    break;
-                case 'C':
-                    subnetMask = '255.255.255.0';
-                    subnetBits = 24;
-                    break;
-                default:
-                    alert('Lớp mạng không hợp lệ!');
+            for (let i = 1; i <= subnetCount; i++) {
+                const hostCount = parseInt(document.getElementById(`hosts${i}`).value);
+                if (isNaN(hostCount) || hostCount <= 0) {
+                    document.getElementById('errorMessage').textContent = 'Số lượng host không hợp lệ. Vui lòng nhập lại.';
                     return;
+                }
+                hostCounts.push(hostCount);
             }
 
-            // Tính toán subnet mask nhị phân
-            const binarySubnetMask = subnetMask.split('.').map(num => parseInt(num).toString(2).padStart(8, '0')).join('.');
+            document.getElementById('errorMessage').textContent = '';
 
-            // Tính toán số bit cần thiết cho mạng con
-            const requiredBits = Math.ceil(Math.log2(subnetCount));
-            const totalBits = subnetBits + requiredBits;
+            // Xóa kết quả cũ
+            document.getElementById('subnetResults').innerHTML = '';
 
-            // Tính toán subnet mask mới và số mạng con
-            const newSubnetMask = (0xFFFFFFFF << (32 - totalBits)) >>> 0;
-            const newSubnetMaskStr = [
-                (newSubnetMask >>> 24) & 0xFF,
-                (newSubnetMask >>> 16) & 0xFF,
-                (newSubnetMask >>> 8) & 0xFF,
-                newSubnetMask & 0xFF
-            ].join('.');
+            const subnets = calculateSubnets(octet1, octet2, octet3, octet4, subnetCount, hostCounts);
 
-            // Tính toán các địa chỉ mạng và broadcast cho từng mạng con
-            const networkAddresses = [];
-            const broadcastAddresses = [];
-            const ipRanges = [];
-            const validIPCounts = [];
-
-            for (let i = 0; i < subnetCount; i++) {
-                const startAddress = (i * (1 << (32 - totalBits))) + (octet1 << 24) + (octet2 << 16) + (octet3 << 8) + octet4;
-                const endAddress = startAddress + (1 << (32 - totalBits)) - 1;
-
-                const networkAddress = [
-                    (startAddress >>> 24) & 0xFF,
-                    (startAddress >>> 16) & 0xFF,
-                    (startAddress >>> 8) & 0xFF,
-                    startAddress & 0xFF
-                ].join('.');
-
-                const broadcastAddress = [
-                    (endAddress >>> 24) & 0xFF,
-                    (endAddress >>> 16) & 0xFF,
-                    (endAddress >>> 8) & 0xFF,
-                    endAddress & 0xFF
-                ].join('.');
-
-                const firstIP = [
-                    (startAddress >>> 24) & 0xFF,
-                    (startAddress >>> 16) & 0xFF,
-                    (startAddress >>> 8) & 0xFF,
-                    (startAddress + 1) & 0xFF
-                ].join('.');
-
-                const lastIP = [
-                    (endAddress >>> 24) & 0xFF,
-                    (endAddress >>> 16) & 0xFF,
-                    (endAddress >>> 8) & 0xFF,
-                    (endAddress - 1) & 0xFF
-                ].join('.');
-
-                networkAddresses.push(networkAddress);
-                broadcastAddresses.push(broadcastAddress);
-                ipRanges.push(`${firstIP} - ${lastIP}`);
-                validIPCounts.push((1 << (32 - totalBits)) - 2);
+            if (!subnets) {
+                document.getElementById('errorMessage').textContent = 'Không thể tính toán các mạng con với số lượng mạng con và số lượng host nhập vào.';
+                return;
             }
 
-            // Hiển thị kết quả
+            // Cập nhật kết quả
+            const binaryIP = convertToBinary(ipAddress);
+            const subnetMask = calculateSubnetMask(subnetCount);
+            const binarySubnetMask = convertToBinary(subnetMask);
+            const networkClass = determineNetworkClass(octet1);
+
             document.getElementById('binaryIP').textContent = binaryIP;
-            document.getElementById('subnetMask').textContent = newSubnetMaskStr;
-            document.getElementById('binarySubnetMask').textContent = newSubnetMaskStr.split('.').map(num => parseInt(num).toString(2).padStart(8, '0')).join('.');
+            document.getElementById('subnetMask').textContent = subnetMask;
+            document.getElementById('binarySubnetMask').textContent = binarySubnetMask;
+            document.getElementById('networkClass').textContent = networkClass;
             document.getElementById('subnetCountResult').textContent = subnetCount;
 
-            const subnetResults = document.getElementById('subnetResults');
-            subnetResults.innerHTML = ''; // Xóa kết quả cũ
+            subnets.forEach((subnet, index) => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>Mạng Con ${index + 1}</td>
+                    <td>${subnet.networkAddress}</td>
+                    <td>${subnet.broadcastAddress}</td>
+                    <td>${subnet.firstHost} - ${subnet.lastHost}</td>
+                    <td>${subnet.validHostCount}</td>
+                `;
+
+                document.getElementById('subnetResults').appendChild(row);
+            });
+        }
+
+        function validateIPAddress(o1, o2, o3, o4) {
+            return [o1, o2, o3, o4].every(octet => octet >= 0 && octet <= 255);
+        }
+
+        function calculateSubnets(o1, o2, o3, o4, subnetCount, hostCounts) {
+            const ip = [o1, o2, o3, o4];
+            const totalAddresses = 256; // Một octet có 256 địa chỉ
+            const subnets = [];
+            const subnetSizes = hostCounts.map(count => Math.pow(2, Math.ceil(Math.log2(count + 2)))); // +2 cho địa chỉ mạng và broadcast
+
+            let startAddress = o4;
 
             for (let i = 0; i < subnetCount; i++) {
-                const row = `<tr>
-                    <td>Subnet ${i + 1}</td>
-                    <td>${networkAddresses[i]}</td>
-                    <td>${broadcastAddresses[i]}</td>
-                    <td>${ipRanges[i]}</td>
-                    <td>${validIPCounts[i]}</td>
-                </tr>`;
-                subnetResults.insertAdjacentHTML('beforeend', row);
+                const subnetSize = subnetSizes[i];
+                
+                // Kiểm tra nếu còn đủ địa chỉ để tạo subnet mới
+                if (startAddress + subnetSize > totalAddresses) {
+                    return null; // Không đủ địa chỉ để tạo subnet mới
+                }
+
+                const endAddress = startAddress + subnetSize - 1;
+                const networkAddress = `${o1}.${o2}.${o3}.${startAddress}`;
+                const broadcastAddress = `${o1}.${o2}.${o3}.${endAddress}`;
+                const firstHost = `${o1}.${o2}.${o3}.${startAddress + 1}`;
+                const lastHost = `${o1}.${o2}.${o3}.${endAddress - 1}`;
+                const validHostCount = subnetSize - 2; // Trừ địa chỉ mạng và broadcast
+
+                subnets.push({
+                    networkAddress,
+                    broadcastAddress,
+                    firstHost,
+                    lastHost,
+                    validHostCount
+                });
+
+                startAddress += subnetSize;
             }
+
+            return subnets;
+        }
+
+        function convertToBinary(ip) {
+            return ip.split('.').map(octet => parseInt(octet, 10).toString(2).padStart(8, '0')).join('.');
+        }
+
+        function calculateSubnetMask(subnetCount) {
+            const maskBits = 32 - Math.ceil(Math.log2(subnetCount));
+            const mask = Array(4).fill(0).map((_, i) => (maskBits > 8 * (3 - i)) ? 255 : 0).join('.');
+            return mask;
+        }
+
+        function determineNetworkClass(octet1) {
+            if (octet1 < 128) return 'A';
+            if (octet1 < 192) return 'B';
+            if (octet1 < 224) return 'C';
+            return 'Khác';
         }
     </script>
 </body>
